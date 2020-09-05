@@ -1,6 +1,10 @@
 const Discord = require('discord.js')
 const client = new Discord.Client()
 
+// Env
+require('dotenv').config()
+const DISCORD_TOKEN = process.env.DISCORD_TOKEN
+
 // Prefix
 const { prefix_rules } = require('./prefix.json')
 // Message
@@ -26,4 +30,4 @@ client.on('message', (msg) => {
 	}
 })
 
-client.login('NzUxNjIwNDIxNTkzNTk2MDE3.X1LvEA.kKH2zPZsgKbigGoc4AAehUZqW3w')
+client.login(DISCORD_TOKEN)
