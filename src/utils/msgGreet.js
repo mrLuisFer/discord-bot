@@ -1,9 +1,9 @@
-const Discord = require('discord.js')
+const { MessageEmbed } = require('discord.js')
 
 const msgGreet = () => {
-	const msgEmbed = new Discord.MessageEmbed()
+	const msgEmbed = new MessageEmbed()
 		.setColor('#e94560')
-		.setTitle('Hola estoy hackeando al FBI')
+		.setTitle('Hola estoy hackeando la Nasa')
 		.setDescription('Unete a codear')
 
 	return msgEmbed
