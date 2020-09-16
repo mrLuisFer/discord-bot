@@ -1,7 +1,7 @@
 const { MessageEmbed } = require('discord.js')
 
-const msgChannel = () => {
-	const channelEmbed = new Discord.MessageEmbed()
+const msgChannel = (msg) => {
+	const channelEmbed = new MessageEmbed()
 		.setTitle(`El nombre del sevidor es: ${msg.guild.name}`)
 		.addField(`No. Devs:`, `${msg.guild.memberCount}`)
 		.addField(`Id:`, `${msg.guild.id}`)
