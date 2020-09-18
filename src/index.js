@@ -1,6 +1,6 @@
 'use strict'
-const { MessageAttachment, MessageEmbed } = require('discord.js')
-const client = new Discord.Client()
+const { MessageAttachment, MessageEmbed, Client } = require('discord.js')
+const client = new Client()
 
 // Env
 require('dotenv').config()
@@ -17,12 +17,12 @@ client.on('ready', () => {
 client.on('channelCreate', async () => {})
 
 // Message
-client.on('message', (msg) => {
-	if (!message.content.startsWith(prefix) || message.author.bot) return
+client.on('message', async (msg) => {
+	if (!msg.content.startsWith(prefix_rules) || msg.author.bot) return
 
 	// Arguments
 	const lowerMsg = msg.content.toLowerCase().trim()
-	const args = message.content.slice(prefix.length).trim().split(' ')
+	const args = msg.content.slice(prefix_rules.length).trim().split(' ')
 	const command = args.shift().toLowerCase()
 
 	// Static Messages
@@ -45,17 +45,29 @@ client.on('message', (msg) => {
 		msg.reply('🏸pong')
 	}
 
-	if (lowerMsg === `${prefix_rules}kick`) {
-		if (msg.member.hasPermission(['BAN_MEMBERS', 'ADMINNISTRATOR'])) {
-			const target = msg.mentions.users.first()
+	if (lowerMsg.startsWith(`${prefix_rules}kick`)) {
+		if (
+			msg.member.hasPermission([
+				'BAN_MEMBERS',
+				'ADMINNISTRATOR',
+				'KICK_MEMBERS',
+			])
+		) {
+			const member = msg.mentions.members.first()
 
-			if (target) {
-				const targetMember = msg.guild.members.cache.get(target.id)
-
-				targetMember.kick()
-
-				const tag = ` <@${msg.member.id}>`
-				msg.channel.send(`${tag} fue kickeado :P`)
+			if (member) {
+				try {
+					member
+						.kick()
+						.then((memb) => {
+							msg.channel.send(`${memb.displayName} fue kickeado`)
+						})
+						.catch(() => {
+							msg.channel.send('Failed for some reason')
+						})
+				} catch {
+					msg.channel.send('Algo fallo y no se por que :L')
+				}
 			} else {
 				msg.channel.send('Coloca un usuario valido')
 			}
