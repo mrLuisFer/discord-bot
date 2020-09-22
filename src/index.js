@@ -1,5 +1,5 @@
 'use strict'
-const { MessageAttachment, MessageEmbed, Client } = require('discord.js')
+const { MessageAttachment, Client } = require('discord.js')
 const client = new Client()
 
 // Env
@@ -14,23 +14,22 @@ client.on('ready', () => {
 	console.log(`bot in ${client.user.tag}`)
 })
 
-client.on('channelCreate', async () => {})
+// Static Messages
+const { mensajes, aleatorio } = require('./utils/msgSentences')
+const msgGreet = require('./utils/msgGreet')
+const msgRepo = require('./utils/msgRepo')
+const msgAvatar = require('./utils/msgAvatar')
+const msgChannel = require('./utils/msgChannel')
+const msgSad = require('./utils/msgSad')
+const msgNice = require('./utils/msgNice')
+const msgWasKicked = require('./utils/msgWasKicked')
 
 // Message
-client.on('message', async (msg) => {
-	if (!msg.content.startsWith(prefix_rules) || msg.author.bot) return
+client.on('message', (msg) => {
+	if (msg.author.bot) return
 
 	// Arguments
 	const lowerMsg = msg.content.toLowerCase().trim()
-	const args = msg.content.slice(prefix_rules.length).trim().split(' ')
-	const command = args.shift().toLowerCase()
-
-	// Static Messages
-	const { mensajes, aleatorio } = require('./utils/msgSentences')
-	const msgGreet = require('./utils/msgGreet')
-	const msgRepo = require('./utils/msgRepo')
-	const msgAvatar = require('./utils/msgAvatar')
-	const msgChannel = require('./utils/msgChannel')
 
 	if (
 		lowerMsg.includes('hola') ||
@@ -60,7 +59,7 @@ client.on('message', async (msg) => {
 					member
 						.kick()
 						.then((memb) => {
-							msg.channel.send(`${memb.displayName} fue kickeado`)
+							msg.channel.send(msgWasKicked(memb.displayName))
 						})
 						.catch(() => {
 							msg.channel.send('Failed for some reason')
@@ -81,7 +80,7 @@ client.on('message', async (msg) => {
 		msg.channel.send(msgRepo())
 	}
 
-	if (lowerMsg.includes(`${prefix_rules}pin`)) {
+	if (lowerMsg.includes(`${prefix_rules}pinned`)) {
 		msg.pin({ reason: 'important' })
 	}
 
@@ -96,33 +95,23 @@ client.on('message', async (msg) => {
 	// Emotions lul
 	if (lowerMsg.startsWith(`${prefix_rules}sad`)) {
 		msg.react('😢')
-		const sadEmbed = new MessageEmbed()
-			.setTitle('The bot is sad...')
-			.setThumbnail('https://media.giphy.com/media/dJYoOVAWf2QkU/giphy.gif')
-
-		msg.channel.send(sadEmbed)
+		msg.channel.send(msgSad())
 	}
 
 	// Others
-	if (
-		lowerMsg.startsWith('hey') ||
-		lowerMsg.includes('hey') ||
-		lowerMsg.startsWith('random') ||
-		lowerMsg.startsWith('oigan')
-	) {
-		return msg.channel.send(mensajes[aleatorio])
+	if (lowerMsg.startsWith(`${prefix_rules}random`)) {
+		msg.channel.send(mensajes[aleatorio])
 	}
 
 	if (lowerMsg === 'f' || lowerMsg === 'efe') {
 		const msgAttachment = new MessageAttachment(
 			'https://media.giphy.com/media/cFLLnExjELn7a/giphy.gif'
 		)
-
 		msg.channel.send(msgAttachment)
 	}
 
 	if (lowerMsg === 'nice bot') {
-		msg.reply(`you are nice too UwU`)
+		msg.channel.send(msgNice(msg))
 	}
 })
 

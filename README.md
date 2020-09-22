@@ -1,6 +1,12 @@
-# A simple Bot
+# A simple Bot 🤖
 
-Este es un simple bot hecho para un canal de Discord de ReactJs
+🌟Es un Bot hecho con Javascript con la libreria de DiscordJs para la plataforma Discord
+
+## Usar el Bot
+
+Para poder usar el bot, primero debes hacer un archivo `.env` y colocar el token de tu propio Bot🤖
+
+Despues usa el comando `npm run dev` para correr el servidor de desarrollo con Nodemon
 
 ### To-do:
 

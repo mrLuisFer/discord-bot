@@ -1,5 +1,3 @@
-'use strict'
-
 let mensajes = [
 	'Parece que alguien quiere llamar la atencion',
 	'Todo bien en casa?',
